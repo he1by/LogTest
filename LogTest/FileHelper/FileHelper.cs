@@ -6,7 +6,8 @@ namespace LogComponent.FileHelper
 {
     public class FileHelper : IDisposable, IFileHelper
     {
-        public string FileHeader { get; set; }
+        //TODO: move to resources
+        private readonly string _fileHeader = "Timestamp               Data\r\n";
         private readonly string _fileName;
         private FileStream _fileStream;
 
@@ -27,9 +28,9 @@ namespace LogComponent.FileHelper
                 _fileStream?.Dispose();
                 _fileStream = new FileStream(_fileName, FileMode.Create, FileAccess.Write, FileShare.Read);
 
-                if (!string.IsNullOrEmpty(FileHeader))
+                if (!string.IsNullOrEmpty(_fileHeader))
                 {
-                    var header = Encoding.UTF8.GetBytes($"{FileHeader}\r\n");
+                    var header = Encoding.UTF8.GetBytes($"{_fileHeader}\r\n");
                     _fileStream.Write(header, 0, header.Length);
                 }
             }
