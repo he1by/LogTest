@@ -8,11 +8,13 @@ namespace LogComponent
 {
     public sealed class Logger : ILogger, IDisposable
     {
+        private IFileHelper _writer;
+        //TODO: think how to refactor ro private and test it
+        public readonly ConcurrentQueue<string> Logs = new ConcurrentQueue<string>();
         private readonly CancellationTokenSource _stopCTS = new CancellationTokenSource();
-        private readonly CancellationTokenSource _softCTS = new CancellationTokenSource();
-        private readonly ConcurrentQueue<string> _logs = new ConcurrentQueue<string>();
-        private readonly IFileHelper _writer;
+        private readonly CancellationTokenSource _softCTS = new CancellationTokenSource();  
         private readonly Task _runner;
+        private readonly DateTime _currentDateTime = DateTime.Now;
 
         public Logger(IFileHelper writer)
         {
@@ -37,7 +39,7 @@ namespace LogComponent
 
         public void WriteLog(string text)
         {
-            _logs.Enqueue($"{DateTime.Now:yyyy-MM-dd HH:mm:ss:fff} {text}. \r\n");
+            Logs.Enqueue($"{_currentDateTime:yyyy-MM-dd HH:mm:ss:fff} {text}. \r\n");
         }
 
         public void Dispose()
@@ -51,7 +53,7 @@ namespace LogComponent
         {
             while (!_softCTS.IsCancellationRequested)
             {
-                while (!_logs.IsEmpty && _logs.TryDequeue(out var line))
+                while (!Logs.IsEmpty && Logs.TryDequeue(out var line))
                 {
                     try
                     {

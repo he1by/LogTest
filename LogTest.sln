@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogComponent", "LogTest\LogComponent.csproj", "{EE0CC7D7-A1A0-4A16-80E5-8B80B480EB47}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{E7E1A7F7-66B8-40C3-B30A-3633C4396AC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogComponentTests", "LogComponentTests\LogComponentTests.csproj", "{13E4F659-144F-4D9E-8759-C78F11E332E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{E7E1A7F7-66B8-40C3-B30A-3633C4396AC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7E1A7F7-66B8-40C3-B30A-3633C4396AC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7E1A7F7-66B8-40C3-B30A-3633C4396AC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13E4F659-144F-4D9E-8759-C78F11E332E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13E4F659-144F-4D9E-8759-C78F11E332E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13E4F659-144F-4D9E-8759-C78F11E332E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13E4F659-144F-4D9E-8759-C78F11E332E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

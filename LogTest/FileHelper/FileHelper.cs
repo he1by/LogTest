@@ -7,48 +7,70 @@ namespace LogComponent.FileHelper
     public class FileHelper : IDisposable, IFileHelper
     {
         //TODO: move to resources
+        public FileStream FileStream;
+        //TODO: refactor
         private readonly string _fileHeader = "Timestamp               Data\r\n";
-        private readonly string _fileName;
-        private FileStream _fileStream;
+        private string _folderPath;
+        private string _fileName;
+        private string _fullPathToFile;
+        private DateTime currentDateTime = DateTime.UtcNow;
 
+        //TODO: DI Filestream
         public FileHelper(string folderPath, string fileName)
         {
+            _folderPath = folderPath;
+            _fileName = fileName;
             InitDirectory(folderPath);
             //TODO: move to service/extension
-            _fileName = Path.Combine(folderPath, $"{fileName}_{DateTime.UtcNow:yyyy-MM-dd}.log");
+            _fullPathToFile = Path.Combine(folderPath, $"{fileName}_{currentDateTime:yyyy-MM-dd}.log");
         }
 
         public void Write(string text)
         {
 
-            if (!File.Exists(_fileName))
+            if (!File.Exists(_fullPathToFile))
             {
-                //TODO: as an idea refactor to using()
-                _fileStream?.Flush();
-                _fileStream?.Dispose();
-                _fileStream = new FileStream(_fileName, FileMode.Create, FileAccess.Write, FileShare.Read);
-
+                InitFileStream();
                 if (!string.IsNullOrEmpty(_fileHeader))
                 {
                     var header = Encoding.UTF8.GetBytes($"{_fileHeader}\r\n");
-                    _fileStream.Write(header, 0, header.Length);
+                    FileStream.Write(header, 0, header.Length);
                 }
             }
 
             var bytes = Encoding.UTF8.GetBytes(text);
-            _fileStream.Write(bytes, 0, bytes.Length);
+            FileStream.Write(bytes, 0, bytes.Length);
         }
 
-        public void Dispose() => _fileStream.Dispose();
+        public void Dispose() => FileStream?.Dispose();
 
-        public void Flush() => _fileStream.Flush();
+        public void Flush() => FileStream?.Flush();
 
-        private void InitDirectory(string folderPath)
+        public void InitDirectory(string folderPath)
         {
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
             }
+        }
+
+        public void InitFileStream()
+        {
+            //TODO: as an idea refactor to using()
+            FileStream?.Flush();
+            FileStream?.Dispose();
+            if(IsCrossesMidnight(currentDateTime, DateTime.UtcNow)){
+                currentDateTime = DateTime.UtcNow;
+                _fullPathToFile = Path.Combine(_folderPath, $"{_fileName}_{currentDateTime:yyyy-MM-dd}.log");
+            }
+            FileStream = new FileStream(_fullPathToFile, FileMode.Create, FileAccess.Write, FileShare.Read);
+        }
+
+
+        //TODO: move to helper/TimeService
+        private bool IsCrossesMidnight(DateTime start, DateTime end)
+        {
+            return start.TimeOfDay > end.TimeOfDay;
         }
     }
 }
